@@ -1,0 +1,20 @@
+/** All supported node kinds in the knowledge graph. */
+export enum NodeKind {
+  Project = 'Project',
+  Package = 'Package',
+  Folder = 'Folder',
+  File = 'File',
+  Namespace = 'Namespace',
+  Module = 'Module',
+  Class = 'Class',
+  Interface = 'Interface',
+  Enum = 'Enum',
+  Function = 'Function',
+  Method = 'Method',
+  Constructor = 'Constructor',
+  Property = 'Property',
+  Variable = 'Variable',
+  TypeAlias = 'TypeAlias',
+  Parameter = 'Parameter',
+  Decorator = 'Decorator',
+}
