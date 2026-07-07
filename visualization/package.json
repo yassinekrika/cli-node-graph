@@ -1,5 +1,5 @@
 {
-  "name": "codegraph-visualization",
+  "name": "cli-node-graph-visualization",
   "private": true,
   "version": "0.1.0",
   "type": "module",

@@ -14,9 +14,9 @@ export class VariableVisitor implements ASTVisitor {
     if (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name)) {
       const parent = node.parent?.parent;
       const isExported =
-        parent &&
-        ts.canHaveModifiers(parent) &&
-        !!(ts.getCombinedModifierFlags(parent) & ts.ModifierFlags.Export);
+        parent && ts.isVariableStatement(parent) && ts.canHaveModifiers(parent)
+          ? !!(ts.getCombinedModifierFlags(parent as unknown as ts.Declaration) & ts.ModifierFlags.Export)
+          : false;
 
       registerSymbolNode(this.ctx, {
         kind: NodeKind.Variable,

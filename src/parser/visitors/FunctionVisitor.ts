@@ -20,6 +20,8 @@ export class FunctionVisitor implements ASTVisitor {
   }
 
   private handleFunction(node: ts.FunctionDeclaration, vctx: VisitorContext): void {
+    if (!node.name || !ts.isIdentifier(node.name)) return;
+
     const name = node.name.text;
     const fnId = registerSymbolNode(this.ctx, {
       kind: NodeKind.Function,

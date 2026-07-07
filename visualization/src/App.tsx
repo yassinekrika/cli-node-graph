@@ -198,7 +198,7 @@ export default function App() {
         <MiniMap nodeColor={(n) => kindColor(String(n.data?.kind ?? ''))} />
 
         <Panel position="top-left" className="panel">
-          <h1>CodeGraph</h1>
+          <h1>CLI Node Graph</h1>
           <input
             type="text"
             placeholder="Search nodes..."

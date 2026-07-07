@@ -1,5 +1,4 @@
 import type { Graph } from '../graph/Graph.js';
-import { EdgeKind } from '../model/EdgeKind.js';
 import { GraphAlgorithms } from '../graph/GraphAlgorithms.js';
 
 /** Analyzes downstream impact of changing a node. */

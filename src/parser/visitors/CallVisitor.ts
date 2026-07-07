@@ -79,8 +79,8 @@ export class CallVisitor implements ASTVisitor {
     if (!decl) return undefined;
 
     const name = this.ctx.symbolResolver.getSymbolName(resolved);
-    const kind = this.inferKind(resolved, decl);
-    const qualifiedName = this.getQualifiedName(resolved, decl, name);
+    const kind = this.inferKind(decl);
+    const qualifiedName = this.getQualifiedName(decl, name);
 
     return this.getOrCreateSymbolNode(qualifiedName, kind, decl, {
       ...vctx,
@@ -88,18 +88,20 @@ export class CallVisitor implements ASTVisitor {
     });
   }
 
-  private getQualifiedName(symbol: ts.Symbol, decl: ts.Declaration, name: string): string {
+  private getQualifiedName(decl: ts.Declaration, name: string): string {
     if (decl.parent && ts.isClassDeclaration(decl.parent) && decl.parent.name) {
       return `${decl.parent.name.text}.${name}`;
     }
     return name;
   }
 
-  private inferKind(symbol: ts.Symbol, decl: ts.Declaration): NodeKind {
-    if (symbol.flags & ts.SymbolFlags.Method) return NodeKind.Method;
-    if (symbol.flags & ts.SymbolFlags.Function) return NodeKind.Function;
-    if (symbol.flags & ts.SymbolFlags.Class) return NodeKind.Class;
-    if (symbol.flags & ts.SymbolFlags.Interface) return NodeKind.Interface;
+  private inferKind(decl: ts.Declaration): NodeKind {
+    if (ts.isMethodDeclaration(decl)) return NodeKind.Method;
+    if (ts.isFunctionDeclaration(decl) || ts.isArrowFunction(decl) || ts.isFunctionExpression(decl)) {
+      return NodeKind.Function;
+    }
+    if (ts.isClassDeclaration(decl)) return NodeKind.Class;
+    if (ts.isInterfaceDeclaration(decl)) return NodeKind.Interface;
     return NodeKind.Function;
   }
 

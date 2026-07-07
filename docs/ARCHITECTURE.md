@@ -2,7 +2,7 @@
 
 ## Overview
 
-CodeGraph uses a layered architecture where each layer is independent and testable.
+cli-node-graph uses a layered architecture where each layer is independent and testable.
 
 ```
 CLI

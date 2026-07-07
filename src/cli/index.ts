@@ -17,9 +17,9 @@ const program = new Command();
 const loader = new ProjectLoader();
 
 program
-  .name('codegraph')
+  .name('cli-node-graph')
   .description('TypeScript codebase knowledge graph analyzer')
-  .version('0.1.0');
+  .version('1.0.1');
 
 program
   .command('analyze')
@@ -40,9 +40,9 @@ program
   .argument('[path]', 'Project root path', '.')
   .action((path: string) => {
     let graph = loader.getGraph();
-    if (!graph) graph = loader.loadCache(resolve(path)) ?? undefined;
+    if (!graph) graph = loader.loadCache(resolve(path));
     if (!graph) {
-      console.error('No graph found. Run: codegraph analyze');
+      console.error('No graph found. Run: cli-node-graph analyze');
       process.exit(1);
     }
     const stats = computeStats(graph);
@@ -57,14 +57,14 @@ program
   .option('-o, --output <file>', 'Output file path')
   .action((path: string, options: { format: string; output?: string }) => {
     let graph = loader.getGraph();
-    if (!graph) graph = loader.loadCache(resolve(path)) ?? undefined;
+    if (!graph) graph = loader.loadCache(resolve(path));
     if (!graph) {
       graph = loader.analyze({ projectRoot: resolve(path) });
     }
 
     const exporter = getExporter(options.format);
     const output = exporter.export(graph);
-    const outFile = options.output ?? `codegraph.${options.format === 'reactflow' ? 'json' : options.format}`;
+    const outFile = options.output ?? `cli-node-graph.${options.format === 'reactflow' ? 'json' : options.format}`;
 
     if (options.output || !process.stdout.isTTY) {
       writeFileSync(outFile, output);
@@ -80,7 +80,7 @@ program
   .argument('[path]', 'Project root path', '.')
   .action((path: string) => {
     let graph = loader.getGraph();
-    if (!graph) graph = loader.loadCache(resolve(path)) ?? undefined;
+    if (!graph) graph = loader.loadCache(resolve(path));
     if (!graph) {
       graph = loader.analyze({ projectRoot: resolve(path) });
     }
@@ -97,7 +97,7 @@ program
   .argument('[path]', 'Project root path', '.')
   .action((target: string, path: string) => {
     let graph = loader.getGraph();
-    if (!graph) graph = loader.loadCache(resolve(path)) ?? undefined;
+    if (!graph) graph = loader.loadCache(resolve(path));
     if (!graph) {
       graph = loader.analyze({ projectRoot: resolve(path) });
     }
@@ -119,7 +119,7 @@ program
   .argument('[path]', 'Project root path', '.')
   .action((path: string) => {
     let graph = loader.getGraph();
-    if (!graph) graph = loader.loadCache(resolve(path)) ?? undefined;
+    if (!graph) graph = loader.loadCache(resolve(path));
     if (!graph) {
       graph = loader.analyze({ projectRoot: resolve(path) });
     }

@@ -2,20 +2,20 @@
 
 ## Commands
 
-### `codegraph analyze [path]`
+### `cli-node-graph analyze [path]`
 
 Analyze a TypeScript project and build the dependency graph.
 
 ```bash
-codegraph analyze .
-codegraph analyze ./apps/api --tsconfig tsconfig.app.json
+cli-node-graph analyze .
+cli-node-graph analyze ./apps/api --tsconfig tsconfig.app.json
 ```
 
-### `codegraph graph [path]`
+### `cli-node-graph graph [path]`
 
 Show summary statistics of the cached or last-analyzed graph.
 
-### `codegraph export [path] --format <format>`
+### `cli-node-graph export [path] --format <format>`
 
 Export the graph to a file format.
 
@@ -30,31 +30,31 @@ Export the graph to a file format.
 | `neo4j` | Neo4j CSV import |
 
 ```bash
-codegraph export . --format json -o graph.json
-codegraph export . --format dot -o graph.dot
-codegraph export . --format reactflow -o graph.json
+cli-node-graph export . --format json -o graph.json
+cli-node-graph export . --format dot -o graph.dot
+cli-node-graph export . --format reactflow -o graph.json
 ```
 
-### `codegraph cycles [path]`
+### `cli-node-graph cycles [path]`
 
 Detect and list all circular dependencies.
 
-### `codegraph impact <target> [path]`
+### `cli-node-graph impact <target> [path]`
 
 Analyze downstream impact of modifying a file or symbol.
 
 ```bash
-codegraph impact src/UserService.ts
-codegraph impact UserController
+cli-node-graph impact src/UserService.ts
+cli-node-graph impact UserController
 ```
 
-### `codegraph stats [path]`
+### `cli-node-graph stats [path]`
 
 Show detailed graph statistics (node/edge counts by kind).
 
 ## Cache
 
-Analysis results are cached in `.codegraph/graph.json` in the project root.
+Analysis results are cached in `.cli-node-graph/graph.json` in the project root.
 
 ## Exit Codes
 

@@ -6,7 +6,7 @@ import { Graph } from '../graph/Graph.js';
 import type { GraphEdge } from '../model/GraphEdge.js';
 import type { GraphNode } from '../model/GraphNode.js';
 
-const CACHE_DIR = '.codegraph';
+const CACHE_DIR = '.cli-node-graph';
 const CACHE_FILE = 'graph.json';
 
 /** Loads and caches project analysis results. */

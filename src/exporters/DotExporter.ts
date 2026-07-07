@@ -6,7 +6,7 @@ export class DotExporter implements GraphExporter {
   readonly format = 'dot';
 
   export(graph: Graph): string {
-    const lines: string[] = ['digraph CodeGraph {', '  rankdir=LR;', '  node [shape=box];'];
+    const lines: string[] = ['digraph cli-node-graph {', '  rankdir=LR;', '  node [shape=box];'];
 
     for (const node of graph.getNodes()) {
       const label = `${node.label}\\n(${node.kind})`;

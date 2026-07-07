@@ -1,4 +1,4 @@
-# CodeGraph
+# cli-node-graph
 
 TypeScript codebase knowledge graph analyzer — an Nx-style dependency graph tool with deep symbol-level analysis.
 
@@ -19,6 +19,7 @@ npm run build
 npm test
 
 # Analyze a project
+<<<<<<< HEAD
 pnpm run codegraph analyze ./tests/fixtures/sample-project
 
 # Export graph
@@ -32,6 +33,21 @@ pnpm run codegraph impact UserService ./tests/fixtures/sample-project
 
 # Statistics
 pnpm run codegraph stats ./tests/fixtures/sample-project
+=======
+npm run cli-node-graph analyze ./tests/fixtures/sample-project
+
+# Export graph
+npm run cli-node-graph export ./tests/fixtures/sample-project --format reactflow -o graph.json
+
+# Detect cycles
+npm run cli-node-graph cycles ./tests/fixtures/sample-project
+
+# Impact analysis
+npm run cli-node-graph impact UserService ./tests/fixtures/sample-project
+
+# Statistics
+npm run cli-node-graph stats ./tests/fixtures/sample-project
+>>>>>>> 6d097b2 (switch to pnpm + build fix)
 ```
 
 ## Visualization
@@ -55,7 +71,7 @@ See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for details.
 ## API
 
 ```typescript
-import { GraphBuilder, GraphAlgorithms, JsonExporter } from 'codegraph';
+import { GraphBuilder, GraphAlgorithms, JsonExporter } from 'cli-node-graph';
 
 const graph = new GraphBuilder().build({ projectRoot: './my-project' });
 const cycles = new GraphAlgorithms(graph).detectCycles();

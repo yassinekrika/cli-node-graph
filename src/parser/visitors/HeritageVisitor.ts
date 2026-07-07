@@ -75,7 +75,7 @@ export class HeritageVisitor implements ASTVisitor {
 
   private resolveHeritageType(
     type: ts.ExpressionWithTypeArguments,
-    vctx: VisitorContext,
+    _vctx: VisitorContext,
   ): string | undefined {
     const symbol = this.ctx.symbolResolver.getSymbolAtLocation(type.expression);
     if (!symbol) return undefined;

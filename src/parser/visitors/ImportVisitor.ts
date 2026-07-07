@@ -28,7 +28,7 @@ export class ImportVisitor implements ASTVisitor {
     const filePath = toPosixPath(sourceFile.fileName);
     const sourceFileId = ensureFileNode(this.ctx, filePath);
 
-    const targetId = this.resolveTarget(specifier, vctx, node);
+    const targetId = this.resolveTarget(specifier, vctx);
     if (!targetId) return;
 
     const isTypeOnly = node.importClause?.isTypeOnly ?? false;
@@ -59,7 +59,7 @@ export class ImportVisitor implements ASTVisitor {
     const sourceFile = vctx.sourceFile;
     const filePath = toPosixPath(sourceFile.fileName);
     const sourceFileId = ensureFileNode(this.ctx, filePath);
-    const targetId = this.resolveTarget(specifier, vctx, node);
+    const targetId = this.resolveTarget(specifier, vctx);
     if (!targetId) return;
 
     addLocatedEdge(this.ctx, {
@@ -74,11 +74,7 @@ export class ImportVisitor implements ASTVisitor {
     });
   }
 
-  private resolveTarget(
-    specifier: string,
-    vctx: VisitorContext,
-    node: ts.Node,
-  ): string | undefined {
+  private resolveTarget(specifier: string, vctx: VisitorContext): string | undefined {
     if (this.ctx.moduleResolver.isPackageImport(specifier)) {
       const packageName = this.ctx.moduleResolver.getPackageName(specifier);
       const packageId = `Package:${packageName}`;

@@ -23,7 +23,7 @@ function sampleGraph(): Graph {
 describe('Exporters', () => {
   it('exports DOT format', () => {
     const output = new DotExporter().export(sampleGraph());
-    expect(output).toContain('digraph CodeGraph');
+    expect(output).toContain('digraph cli-node-graph');
     expect(output).toContain('IMPORTS');
   });
 

@@ -18,7 +18,7 @@ export class DecoratorVisitor implements ASTVisitor {
     if (!targetId) return;
 
     for (const decorator of ts.getDecorators(node) ?? []) {
-      const decoratorId = this.resolveDecorator(decorator, vctx);
+      const decoratorId = this.resolveDecorator(decorator);
       if (decoratorId) {
         addLocatedEdge(this.ctx, {
           source: targetId,
@@ -44,7 +44,7 @@ export class DecoratorVisitor implements ASTVisitor {
     return undefined;
   }
 
-  private resolveDecorator(decorator: ts.Decorator, vctx: VisitorContext): string | undefined {
+  private resolveDecorator(decorator: ts.Decorator): string | undefined {
     const expr = decorator.expression;
     let name: string | undefined;
 

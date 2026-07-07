@@ -15,12 +15,15 @@ export class ExportVisitor implements ASTVisitor {
   visit(node: ts.Node, vctx: VisitorContext): void {
     if (ts.isExportDeclaration(node)) {
       this.handleExportDeclaration(node, vctx);
-    } else if (
-      ts.canHaveModifiers(node) &&
-      ts.getCombinedModifierFlags(node as ts.HasModifiers) & ts.ModifierFlags.Export
-    ) {
+    } else if (this.isExportedNode(node)) {
       this.handleExportedDeclaration(node, vctx);
     }
+  }
+
+  private isExportedNode(node: ts.Node): boolean {
+    if (!ts.canHaveModifiers(node)) return false;
+    const declaration = node as ts.Declaration;
+    return !!(ts.getCombinedModifierFlags(declaration) & ts.ModifierFlags.Export);
   }
 
   private handleExportDeclaration(node: ts.ExportDeclaration, vctx: VisitorContext): void {

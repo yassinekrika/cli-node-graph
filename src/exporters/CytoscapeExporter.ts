@@ -7,6 +7,14 @@ export class CytoscapeExporter implements GraphExporter {
 
   export(graph: Graph): string {
     const elements = [
+      {
+        data: {
+          id: '__graph__',
+          label: 'cli-node-graph',
+          kind: 'Graph',
+        },
+        group: 'nodes' as const,
+      },
       ...graph.getNodes().map((node) => ({
         data: {
           id: node.id,
@@ -15,6 +23,7 @@ export class CytoscapeExporter implements GraphExporter {
           file: node.file,
           ...node.metadata,
         },
+        group: 'nodes' as const,
       })),
       ...graph.getEdges().map((edge) => ({
         data: {
@@ -24,6 +33,7 @@ export class CytoscapeExporter implements GraphExporter {
           kind: edge.kind,
           ...edge.metadata,
         },
+        group: 'edges' as const,
       })),
     ];
 

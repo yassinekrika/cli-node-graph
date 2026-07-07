@@ -74,6 +74,8 @@ export class ClassVisitor implements ASTVisitor {
   }
 
   private handleProperty(node: ts.PropertyDeclaration, vctx: VisitorContext): void {
+    if (!ts.isIdentifier(node.name)) return;
+
     const classNode = node.parent;
     if (!ts.isClassDeclaration(classNode) || !classNode.name) return;
 

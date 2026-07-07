@@ -1,12 +1,12 @@
 import type { GraphEdge } from '../../model/GraphEdge.js';
-import type { GraphNode, SourceRange } from '../../model/GraphNode.js';
+import type { SourceRange } from '../../model/GraphNode.js';
 import { EdgeKind } from '../../model/EdgeKind.js';
 import { NodeKind } from '../../model/NodeKind.js';
 import type { EdgeFactory } from '../../graph/EdgeFactory.js';
 import type { NodeFactory } from '../../graph/NodeFactory.js';
 import type { Graph } from '../../graph/Graph.js';
 import type { ModuleResolver } from '../../resolver/ModuleResolver.js';
-import type { PathResolver } from '../../resolver/PathResolver.js';
+import type { PathResolver } from '../../resolver/ModuleResolver.js';
 import type { SymbolResolver } from '../../resolver/SymbolResolver.js';
 import type { TypeResolver } from '../../resolver/TypeResolver.js';
 import { toPosixPath } from '../../utils/path.js';
