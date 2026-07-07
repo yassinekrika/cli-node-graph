@@ -19,27 +19,27 @@ npm run build
 npm test
 
 # Analyze a project
-npm run codegraph analyze ./tests/fixtures/sample-project
+pnpm run codegraph analyze ./tests/fixtures/sample-project
 
 # Export graph
-npm run codegraph export ./tests/fixtures/sample-project --format reactflow -o graph.json
+pnpm run codegraph export ./tests/fixtures/sample-project --format reactflow -o graph.json
 
 # Detect cycles
-npm run codegraph cycles ./tests/fixtures/sample-project
+pnpm run codegraph cycles ./tests/fixtures/sample-project
 
 # Impact analysis
-npm run codegraph impact UserService ./tests/fixtures/sample-project
+pnpm run codegraph impact UserService ./tests/fixtures/sample-project
 
 # Statistics
-npm run codegraph stats ./tests/fixtures/sample-project
+pnpm run codegraph stats ./tests/fixtures/sample-project
 ```
 
 ## Visualization
 
 ```bash
 cd visualization
-npm install
-npm run dev
+pnpm install
+pnpm run dev
 ```
 
 Load a React Flow JSON export from the CLI to visualize your codebase graph interactively.
