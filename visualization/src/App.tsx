@@ -79,7 +79,7 @@ export default function App() {
   const [pathEnd, setPathEnd] = useState('');
   const [highlightPath, setHighlightPath] = useState<string[]>([]);
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
-  const [collapsedFolders, setCollapsedFolders] = useState<Set<string>>(new Set());
+  const [collapsedFolders] = useState<Set<string>>(new Set());
 
   const initialNodes = useMemo(() => toFlowNodes(SAMPLE_GRAPH), []);
   const initialEdges = useMemo(() => toFlowEdges(SAMPLE_GRAPH), []);
