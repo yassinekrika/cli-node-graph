@@ -46,6 +46,14 @@
     "code-intelligence"
   ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yassinekrika/cli-node-graph"
+  },
+  "homepage": "https://github.com/yassinekrika/cli-node-graph#readme",
+  "bugs": {
+    "url": "https://github.com/yassinekrika/cli-node-graph/issues"
+  },
   "dependencies": {
     "commander": "^13.1.0",
     "fast-glob": "^3.3.3"
