@@ -181,17 +181,18 @@ program
     };
 
     const server = createServer((req, res) => {
-      const url = req.url ?? '/';
+      // Strip query strings / hash fragments before resolving paths
+      const pathname = new URL(req.url ?? '/', `http://localhost:${port}`).pathname;
 
       // Serve the live graph data
-      if (url === '/graph-data.json') {
+      if (pathname === '/graph-data.json') {
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(graphJson);
         return;
       }
 
       // Serve static files, SPA fallback to index.html
-      let filePath = join(vizDir, url === '/' ? 'index.html' : url);
+      let filePath = join(vizDir, pathname === '/' ? 'index.html' : pathname);
       if (!existsSync(filePath)) {
         filePath = join(vizDir, 'index.html');
       }

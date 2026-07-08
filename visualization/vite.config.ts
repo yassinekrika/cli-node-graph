@@ -4,5 +4,7 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [react()],
   server: { port: 5173 },
-  base: process.env.GITHUB_REPOSITORY ? `/${process.env.GITHUB_REPOSITORY.split('/')[1]}/` : '/',
+  // VITE_DEPLOY_BASE is set explicitly for GitHub Pages deploys.
+  // When unset (CLI publish build / local dev), defaults to '/'.
+  base: process.env.VITE_DEPLOY_BASE ?? '/',
 });
