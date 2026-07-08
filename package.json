@@ -1,6 +1,6 @@
 {
   "name": "cli-node-graph",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "TypeScript codebase knowledge graph analyzer (Nx-style)",
   "type": "module",
   "main": "./dist/index.js",
