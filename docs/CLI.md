@@ -2,6 +2,24 @@
 
 ## Commands
 
+### `cli-node-graph view [path]`
+
+Analyze a TypeScript project and open an interactive graph visualization in the browser.
+Starts a local HTTP server serving the pre-built visualization app with your project's graph data.
+
+```bash
+cli-node-graph view .
+cli-node-graph view ./apps/api --tsconfig tsconfig.app.json
+cli-node-graph view . --port 3000
+cli-node-graph view . --no-open   # print URL only, don't auto-open browser
+```
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `--tsconfig <path>` | `tsconfig.json` | Path to tsconfig.json |
+| `--port <number>` | `5173` | Local server port |
+| `--no-open` | — | Disable auto-opening the browser |
+
 ### `cli-node-graph analyze [path]`
 
 Analyze a TypeScript project and build the dependency graph.

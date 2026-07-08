@@ -1,6 +1,9 @@
 #!/usr/bin/env node
-import { writeFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { createServer } from 'node:http';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { dirname, extname, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { spawn } from 'node:child_process';
 import { Command } from 'commander';
 import { CircularDependencyAnalyzer } from '../analysis/CircularDependencyAnalyzer.js';
 import { computeStats } from '../analysis/LayerViolationAnalyzer.js';
@@ -126,6 +129,107 @@ program
 
     const stats = computeStats(graph);
     console.log(JSON.stringify(stats, null, 2));
+  });
+
+program
+  .command('view')
+  .description('Visualize the project dependency graph in the browser')
+  .argument('[path]', 'Project root path', '.')
+  .option('--tsconfig <path>', 'Path to tsconfig.json', 'tsconfig.json')
+  .option('--port <number>', 'Local server port', '5173')
+  .option('--no-open', 'Do not automatically open the browser')
+  .action((path: string, options: { tsconfig: string; port: string; open: boolean }) => {
+    const projectRoot = resolve(path);
+    const port = parseInt(options.port, 10);
+
+    // 1. Analyze the project
+    console.error(`\n🔍 Analyzing ${projectRoot}...`);
+    let graph = loader.getGraph();
+    if (!graph) graph = loader.loadCache(projectRoot);
+    if (!graph) {
+      graph = loader.analyze({ projectRoot, tsconfigPath: options.tsconfig });
+    }
+    console.error(`✅ Graph ready: ${String(graph.nodeCount)} nodes, ${String(graph.edgeCount)} edges`);
+
+    // 2. Export as ReactFlow JSON
+    const exporter = new ReactFlowExporter();
+    const graphJson = exporter.export(graph);
+
+    // 3. Locate the pre-built visualization app
+    const __dirname = dirname(fileURLToPath(import.meta.url));
+    const vizDir = join(__dirname, '../../visualization/dist');
+
+    if (!existsSync(vizDir)) {
+      console.error(
+        `\n❌ Visualization app not found at ${vizDir}\n` +
+        `   Please run: cd visualization && pnpm build\n`,
+      );
+      process.exit(1);
+    }
+
+    // 4. Start a minimal HTTP server
+    const MIME: Record<string, string> = {
+      '.html': 'text/html; charset=utf-8',
+      '.js': 'application/javascript',
+      '.css': 'text/css',
+      '.json': 'application/json',
+      '.svg': 'image/svg+xml',
+      '.png': 'image/png',
+      '.ico': 'image/x-icon',
+      '.woff2': 'font/woff2',
+      '.woff': 'font/woff',
+    };
+
+    const server = createServer((req, res) => {
+      const url = req.url ?? '/';
+
+      // Serve the live graph data
+      if (url === '/graph-data.json') {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(graphJson);
+        return;
+      }
+
+      // Serve static files, SPA fallback to index.html
+      let filePath = join(vizDir, url === '/' ? 'index.html' : url);
+      if (!existsSync(filePath)) {
+        filePath = join(vizDir, 'index.html');
+      }
+
+      try {
+        const content = readFileSync(filePath);
+        const mime = MIME[extname(filePath)] ?? 'application/octet-stream';
+        res.writeHead(200, { 'Content-Type': mime });
+        res.end(content);
+      } catch {
+        res.writeHead(404);
+        res.end('Not found');
+      }
+    });
+
+    server.listen(port, () => {
+      const url = `http://localhost:${port}`;
+      console.error(`\n✨ Graph visualization ready at ${url}`);
+      console.error('   Press Ctrl+C to stop.\n');
+
+      // 5. Open browser
+      if (options.open) {
+        try {
+          const opener =
+            process.platform === 'win32' ? 'cmd' :
+            process.platform === 'darwin' ? 'open' : 'xdg-open';
+          const args = process.platform === 'win32' ? ['/c', 'start', url] : [url];
+          spawn(opener, args, { detached: true, stdio: 'ignore' }).unref();
+        } catch { /* silently ignore */ }
+      }
+    });
+
+    // Keep process alive
+    process.on('SIGINT', () => {
+      server.close();
+      console.error('\n👋 Server stopped.');
+      process.exit(0);
+    });
   });
 
 function getExporter(format: string): GraphExporter {

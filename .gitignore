@@ -6,3 +6,4 @@ visualization/dist/
 .DS_Store
 .cli-node-graph/
 coverage/
+visualization/public/graph-data.json

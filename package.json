@@ -5,7 +5,7 @@
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": ["dist", "README.md", "LICENSE", "docs"],
+  "files": ["dist", "visualization/dist", "README.md", "LICENSE", "docs"],
   "bin": {
     "cli-node-graph": "./dist/cli/index.js"
   },
@@ -17,6 +17,8 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
+    "build:viz": "cd visualization && pnpm build",
+    "build:all": "pnpm build && pnpm build:viz",
     "dev": "tsx src/cli/index.ts",
     "cli-node-graph": "tsx src/cli/index.ts",
     "test": "vitest run",

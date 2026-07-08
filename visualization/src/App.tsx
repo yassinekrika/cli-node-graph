@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   ReactFlow,
   Background,
@@ -81,15 +81,31 @@ export default function App() {
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
   const [collapsedFolders] = useState<Set<string>>(new Set());
 
-  const initialNodes = useMemo(() => toFlowNodes(SAMPLE_GRAPH), []);
-  const initialEdges = useMemo(() => toFlowEdges(SAMPLE_GRAPH), []);
+  const [graphData, setGraphData] = useState<ReactFlowExport>(SAMPLE_GRAPH);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Auto-fetch graph data served by the CLI's built-in HTTP server.
+  // Falls back to SAMPLE_GRAPH when running standalone.
+  useEffect(() => {
+    fetch('/graph-data.json')
+      .then((r) => {
+        if (!r.ok) throw new Error('not found');
+        return r.json() as Promise<ReactFlowExport>;
+      })
+      .then((data) => setGraphData(data))
+      .catch(() => { /* keep SAMPLE_GRAPH */ })
+      .finally(() => setIsLoading(false));
+  }, []);
+
+  const initialNodes = useMemo(() => toFlowNodes(graphData), [graphData]);
+  const initialEdges = useMemo(() => toFlowEdges(graphData), [graphData]);
 
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
   const applyFilters = useCallback(() => {
-    let filteredNodes = toFlowNodes(SAMPLE_GRAPH);
-    let filteredEdges = toFlowEdges(SAMPLE_GRAPH);
+    let filteredNodes = toFlowNodes(graphData);
+    let filteredEdges = toFlowEdges(graphData);
 
     if (search) {
       const q = search.toLowerCase();
@@ -132,7 +148,7 @@ export default function App() {
 
     setNodes(laid);
     setEdges(filteredEdges);
-  }, [search, selectedKind, selectedEdgeKind, layout, highlightPath, collapsedFolders, setNodes, setEdges]);
+  }, [search, selectedKind, selectedEdgeKind, layout, highlightPath, collapsedFolders, graphData, setNodes, setEdges]);
 
   const onNodeClick = useCallback(
     (_: React.MouseEvent, node: Node) => {
@@ -183,6 +199,11 @@ export default function App() {
 
   return (
     <div className={`app ${darkMode ? 'dark' : 'light'}`}>
+      {isLoading && (
+        <div style={{ position: 'fixed', top: 12, right: 12, zIndex: 9999, background: 'rgba(15,23,42,0.85)', color: '#94a3b8', borderRadius: 8, padding: '6px 14px', fontSize: 13 }}>
+          Loading graph…
+        </div>
+      )}
       <ReactFlow
         nodes={nodes}
         edges={edges}
