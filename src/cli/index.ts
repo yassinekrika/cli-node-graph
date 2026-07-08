@@ -214,13 +214,23 @@ program
 
       // 5. Open browser
       if (options.open) {
-        try {
-          const opener =
-            process.platform === 'win32' ? 'cmd' :
-            process.platform === 'darwin' ? 'open' : 'xdg-open';
-          const args = process.platform === 'win32' ? ['/c', 'start', url] : [url];
-          spawn(opener, args, { detached: true, stdio: 'ignore' }).unref();
-        } catch { /* silently ignore */ }
+        const openers =
+          process.platform === 'win32' ? [['cmd', ['/c', 'start', url]]] :
+          process.platform === 'darwin' ? [['open', [url]]] :
+          [['xdg-open', [url]], ['sensible-browser', [url]], ['firefox', [url]], ['chromium-browser', [url]]];
+
+        const tryOpen = (list: [string, string[]][]) => {
+          if (list.length === 0) {
+            console.error(`   Open your browser at: ${url}`);
+            return;
+          }
+          const [[cmd, args], ...rest] = list;
+          const child = spawn(cmd, args, { detached: true, stdio: 'ignore' });
+          child.on('error', () => tryOpen(rest)); // try next opener on failure
+          child.unref();
+        };
+
+        tryOpen(openers as [string, string[]][]);
       }
     });
 
