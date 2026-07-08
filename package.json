@@ -1,11 +1,17 @@
 {
   "name": "cli-node-graph",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "TypeScript codebase knowledge graph analyzer (Nx-style)",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": ["dist", "visualization/dist", "README.md", "LICENSE", "docs"],
+  "files": [
+    "dist",
+    "visualization/dist",
+    "README.md",
+    "LICENSE",
+    "docs"
+  ],
   "bin": {
     "cli-node-graph": "./dist/cli/index.js"
   },
