@@ -2,84 +2,103 @@
 
 TypeScript codebase knowledge graph analyzer — an Nx-style dependency graph tool with deep symbol-level analysis.
 
+[![npm version](https://img.shields.io/npm/v/cli-node-graph.svg)](https://npmjs.org/package/cli-node-graph)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 ## Features
 
-- **Full AST analysis** using the TypeScript Compiler API
-- **Rich graph model** — files, classes, interfaces, functions, methods, imports, calls, inheritance, decorators, and more
-- **Graph algorithms** — cycle detection, shortest path, impact analysis, topological sort
-- **Multiple export formats** — JSON, DOT, GraphML, Mermaid, Cytoscape, React Flow, Neo4j CSV
-- **CLI** for analysis, export, and querying
-- **React Flow visualization** with search, filtering, path finder, and layouts
+- **Deep AST Analysis:** Parses TypeScript files to extract classes, interfaces, functions, methods, and decorators.
+- **Rich Relationships:** Tracks imports, function calls, class inheritance, and structural dependencies.
+- **Advanced Graph Algorithms:** Includes cycle detection, shortest path, impact analysis, and topological sorting.
+- **Multiple Export Formats:** Export to JSON, DOT (Graphviz), GraphML, Mermaid, Cytoscape, React Flow, and Neo4j CSV.
+- **Visualization Tools:** Use the built-in React Flow visualizer for interactive graph exploration.
 
-## Quick Start
+## Installation
 
-```bash
-npm install
-npm run build
-npm test
-
-# Analyze a project
-<<<<<<< HEAD
-pnpm run codegraph analyze ./tests/fixtures/sample-project
-
-# Export graph
-pnpm run codegraph export ./tests/fixtures/sample-project --format reactflow -o graph.json
-
-# Detect cycles
-pnpm run codegraph cycles ./tests/fixtures/sample-project
-
-# Impact analysis
-pnpm run codegraph impact UserService ./tests/fixtures/sample-project
-
-# Statistics
-pnpm run codegraph stats ./tests/fixtures/sample-project
-=======
-npm run cli-node-graph analyze ./tests/fixtures/sample-project
-
-# Export graph
-npm run cli-node-graph export ./tests/fixtures/sample-project --format reactflow -o graph.json
-
-# Detect cycles
-npm run cli-node-graph cycles ./tests/fixtures/sample-project
-
-# Impact analysis
-npm run cli-node-graph impact UserService ./tests/fixtures/sample-project
-
-# Statistics
-npm run cli-node-graph stats ./tests/fixtures/sample-project
->>>>>>> 6d097b2 (switch to pnpm + build fix)
-```
-
-## Visualization
+Install globally to use the CLI from anywhere:
 
 ```bash
-cd visualization
-pnpm install
-pnpm run dev
+npm install -g cli-node-graph
+# or
+pnpm add -g cli-node-graph
+# or
+yarn global add cli-node-graph
 ```
 
-Load a React Flow JSON export from the CLI to visualize your codebase graph interactively.
+Or run it directly using `npx`:
 
-## Architecture
-
-```
-CLI → Project Loader → TypeScript Program → AST Walker → Visitors → Resolvers → Graph Builder → Graph → Exporters / Analyzers
+```bash
+npx cli-node-graph <command> [options]
 ```
 
-See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for details.
+## Usage
 
-## API
+### Analyzing a Project
+
+Analyze a TypeScript codebase to build the knowledge graph:
+
+```bash
+cli-node-graph analyze ./path/to/project
+```
+
+### Exporting the Graph
+
+Export the knowledge graph to various formats (e.g., `reactflow`, `json`, `dot`, `mermaid`):
+
+```bash
+cli-node-graph export ./path/to/project --format reactflow -o graph.json
+```
+
+### Finding Cycles
+
+Detect circular dependencies in your project:
+
+```bash
+cli-node-graph cycles ./path/to/project
+```
+
+### Impact Analysis
+
+Determine what files or symbols are affected if you change a specific symbol:
+
+```bash
+cli-node-graph impact UserService ./path/to/project
+```
+
+### Project Statistics
+
+View overall statistics of your codebase:
+
+```bash
+cli-node-graph stats ./path/to/project
+```
+
+## API Usage
+
+You can also use `cli-node-graph` programmatically in your Node.js scripts:
+
+```bash
+npm install cli-node-graph
+```
 
 ```typescript
 import { GraphBuilder, GraphAlgorithms, JsonExporter } from 'cli-node-graph';
 
+// Build the graph
 const graph = new GraphBuilder().build({ projectRoot: './my-project' });
+
+// Analyze the graph
 const cycles = new GraphAlgorithms(graph).detectCycles();
+console.log('Cycles found:', cycles);
+
+// Export the graph
 const json = new JsonExporter().export(graph);
 ```
 
-See [docs/API.md](docs/API.md) for the full API reference.
+## Contributing
+
+If you're interested in contributing to the project, please see our [Contributing Guide](CONTRIBUTING.md) for details on setting up the development environment, architecture, and running tests.
 
 ## License
 
-MIT
+[MIT](LICENSE)
